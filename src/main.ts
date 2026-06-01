@@ -12,7 +12,7 @@ console.log("Hello from src/main.ts");
 export {};
 
 // ===============================
-// Sistema simple de reservas de cine
+// Sistema simple de reservas de cine // npm run console
 // ===============================
 
 // L = libre
@@ -73,24 +73,43 @@ function mostrarSala(sala: Sala): void {
 // ===============================
 
 function reservarAsiento(sala: Sala, fila: number, columna: number): void {
+
+//sala = [
+// [], fila 1 ( posicion 0)
+// [], fila 2 ( posicion 1)
+// []  fila 3 ( posicion 2)
+//]
+// Si elijen la fila, necesitamos su posicion restando 1
   const indiceFila = fila - 1;
+
+
+
+//sala = [
+// [], fila 1 ( posicion 0)
+// [], fila 2 ( posicion 1)
+// [ L , L , L , X ] fila 3 ( posicion 2)
+//   0   1   2   3   >>> LA POSICIÓN 1 ES EL INDICE 0...
+//]
   const indiceColumna = columna - 1;
 
+  // Validaciones - Si los indices son menores o mayores a los existentes:
   if (
-    indiceFila < 0 ||
-    indiceFila >= sala.length ||
-    indiceColumna < 0 ||
-    indiceColumna >= sala[0].length
+    indiceFila < 0 ||             // Si el indice de fila es negativo o..
+    indiceFila >= sala.length ||  // Si el indice de fila es mayor o igual a la longitud de la sala, o...
+    indiceColumna < 0 ||          // Si el indice de colum es negativo o...
+    indiceColumna >= sala[0].length  // Si el indice de columna es mayor o igual a la longitud de la fila
   ) {
     console.log(`El asiento Fila ${fila}, Columna ${columna} no existe.`);
     return;
   }
 
-  if (sala[indiceFila][indiceColumna] === "X") {
+  // Validamos si ya esta ocupado...
+  if (sala[indiceFila][indiceColumna] === "X") { // Chequeando si hay una x en esa posicion.
     console.log(`El asiento Fila ${fila}, Columna ${columna} ya está ocupado.`);
     return;
   }
 
+  // Si llegamos hasta aca la localizacion es correcta y no es X asique seteamos el asiento.
   sala[indiceFila][indiceColumna] = "X";
   console.log(`Reserva confirmada: Fila ${fila}, Columna ${columna}.`);
 }
@@ -104,15 +123,24 @@ function contarAsientos(sala: Sala): void {
   let ocupados = 0;
 
   for (let fila = 0; fila < sala.length; fila++) {
-    for (let columna = 0; columna < sala[fila].length; columna++) {
-      if (sala[fila][columna] === "L") {
-        libres++;
-      } else {
-        ocupados++;
+
+    //Primer pasada fila = 0
+
+
+    //                        0   <    10
+    //                        0   <    sala[0].length
+    for (let columna = 0; columna < sala[fila].length; columna++) {//itera 10 veces x cada fila
+      //En la primer pasada...
+      //si        "L"         === "L"
+      if (sala[fila][columna] === "L") { // Si esa posicion esta libre
+        libres++;                        // Suma uno a los libres
+      } else {                           // O si no
+        ocupados++;                      // Suma a los ocupados
       }
     }
   }
-
+  
+  // Se muestra conteo final
   console.log(`\nAsientos libres: ${libres}`);
   console.log(`Asientos ocupados: ${ocupados}`);
 }
